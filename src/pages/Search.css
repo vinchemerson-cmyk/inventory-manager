@@ -1,0 +1,243 @@
+.search-page {
+  min-height: 100vh;
+  background: #f5f7fa;
+}
+
+.search-page__content {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 20px 24px;
+}
+
+.search-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-icon {
+  position: absolute;
+  left: 16px;
+  color: #9ca3af;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  padding: 14px 48px 14px 48px;
+  border: 2px solid #e5e7eb;
+  border-radius: 12px;
+  font-size: 15px;
+  color: #1f2937;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+.search-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 4px rgba(37, 99, 235, 0.1);
+}
+
+.search-clear-btn {
+  position: absolute;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #6b7280;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.search-clear-btn:hover {
+  background: #d1d5db;
+  color: #374151;
+}
+
+.search-history {
+  margin-top: 16px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+}
+
+.search-history__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px 10px;
+}
+
+.search-history__title {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.search-history__clear {
+  border: none;
+  background: none;
+  font-size: 13px;
+  color: #9ca3af;
+  cursor: pointer;
+}
+
+.search-history__clear:hover {
+  color: #2563eb;
+}
+
+.search-history__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.search-history__item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  font-size: 14px;
+  color: #374151;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.1s;
+}
+
+.search-history__item:hover {
+  background: #f9fafb;
+}
+
+.search-history__item-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.search-results {
+  margin-top: 20px;
+}
+
+.search-results__header {
+  font-size: 13px;
+  color: #6b7280;
+  margin-bottom: 12px;
+  padding: 0 4px;
+}
+
+.search-results__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.search-result-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 20px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.search-result-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transform: translateY(-1px);
+}
+
+.search-result-card__main {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  flex: 1;
+  min-width: 0;
+}
+
+.search-result-card__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-result-card__package-icon {
+  color: #9ca3af;
+  flex-shrink: 0;
+}
+
+.search-result-card__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.search-result-card__model {
+  font-size: 12px;
+  color: #6b7280;
+  background: #f3f4f6;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+.search-result-card__meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.search-result-card__tag {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 500;
+  color: #2563eb;
+  background: #eff6ff;
+  padding: 2px 10px;
+  border-radius: 4px;
+}
+
+.search-result-card__detail {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.search-result-card__aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 4px;
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+
+.search-result-card__quantity {
+  font-size: 20px;
+  font-weight: 700;
+  color: #1f2937;
+  line-height: 1;
+}
+
+.search-result-card__location {
+  font-size: 12px;
+  color: #9ca3af;
+}
+
+.search-result-card__arrow {
+  color: #d1d5db;
+  margin-top: 4px;
+}
