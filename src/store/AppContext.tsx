@@ -6,6 +6,9 @@ import type {
   Category,
   Location,
   Supplier,
+  BrandItem,
+  PackageItem,
+  ModelItem,
   AppSettings,
 } from '../types';
 import { generateId } from '../utils/helpers';
@@ -13,6 +16,9 @@ import {
   defaultCategories,
   defaultLocations,
   defaultSuppliers,
+  defaultBrands,
+  defaultPackages,
+  defaultModels,
   defaultComponents,
   defaultTransactions,
 } from '../data/mockData';
@@ -30,6 +36,9 @@ function loadState(): AppState {
         categories: parsed.categories ?? defaultCategories,
         locations: parsed.locations ?? defaultLocations,
         suppliers: parsed.suppliers ?? defaultSuppliers,
+        brands: parsed.brands ?? defaultBrands,
+        packages: parsed.packages ?? defaultPackages,
+        models: parsed.models ?? defaultModels,
         settings: parsed.settings ?? defaultSettings,
       };
     }
@@ -42,6 +51,9 @@ function loadState(): AppState {
     categories: defaultCategories,
     locations: defaultLocations,
     suppliers: defaultSuppliers,
+    brands: defaultBrands,
+    packages: defaultPackages,
+    models: defaultModels,
     settings: defaultSettings,
   };
 }
@@ -76,6 +88,15 @@ type Action =
   | { type: 'ADD_SUPPLIER'; payload: Supplier }
   | { type: 'UPDATE_SUPPLIER'; payload: Supplier }
   | { type: 'DELETE_SUPPLIER'; payload: string }
+  | { type: 'ADD_BRAND'; payload: BrandItem }
+  | { type: 'UPDATE_BRAND'; payload: BrandItem }
+  | { type: 'DELETE_BRAND'; payload: string }
+  | { type: 'ADD_PACKAGE'; payload: PackageItem }
+  | { type: 'UPDATE_PACKAGE'; payload: PackageItem }
+  | { type: 'DELETE_PACKAGE'; payload: string }
+  | { type: 'ADD_MODEL'; payload: ModelItem }
+  | { type: 'UPDATE_MODEL'; payload: ModelItem }
+  | { type: 'DELETE_MODEL'; payload: string }
   | { type: 'UPDATE_SETTINGS'; payload: Partial<AppSettings> }
   | { type: 'RESET_DATA' };
 
@@ -168,6 +189,48 @@ function reducer(state: AppState, action: Action): AppState {
         ...state,
         suppliers: state.suppliers.filter((s) => s.id !== action.payload),
       };
+    case 'ADD_BRAND':
+      return { ...state, brands: [...state.brands, action.payload] };
+    case 'UPDATE_BRAND':
+      return {
+        ...state,
+        brands: state.brands.map((b) =>
+          b.id === action.payload.id ? action.payload : b
+        ),
+      };
+    case 'DELETE_BRAND':
+      return {
+        ...state,
+        brands: state.brands.filter((b) => b.id !== action.payload),
+      };
+    case 'ADD_PACKAGE':
+      return { ...state, packages: [...state.packages, action.payload] };
+    case 'UPDATE_PACKAGE':
+      return {
+        ...state,
+        packages: state.packages.map((p) =>
+          p.id === action.payload.id ? action.payload : p
+        ),
+      };
+    case 'DELETE_PACKAGE':
+      return {
+        ...state,
+        packages: state.packages.filter((p) => p.id !== action.payload),
+      };
+    case 'ADD_MODEL':
+      return { ...state, models: [...state.models, action.payload] };
+    case 'UPDATE_MODEL':
+      return {
+        ...state,
+        models: state.models.map((m) =>
+          m.id === action.payload.id ? action.payload : m
+        ),
+      };
+    case 'DELETE_MODEL':
+      return {
+        ...state,
+        models: state.models.filter((m) => m.id !== action.payload),
+      };
     case 'UPDATE_SETTINGS':
       return {
         ...state,
@@ -180,6 +243,9 @@ function reducer(state: AppState, action: Action): AppState {
         categories: defaultCategories,
         locations: defaultLocations,
         suppliers: defaultSuppliers,
+        brands: defaultBrands,
+        packages: defaultPackages,
+        models: defaultModels,
         settings: defaultSettings,
       };
     default:
@@ -205,6 +271,15 @@ interface AppContextType {
   addSupplier: (name: string) => void;
   updateSupplier: (sup: Supplier) => void;
   deleteSupplier: (id: string) => void;
+  addBrand: (name: string) => BrandItem;
+  updateBrand: (b: BrandItem) => void;
+  deleteBrand: (id: string) => void;
+  addPackage: (name: string) => PackageItem;
+  updatePackage: (p: PackageItem) => void;
+  deletePackage: (id: string) => void;
+  addModel: (name: string) => ModelItem;
+  updateModel: (m: ModelItem) => void;
+  deleteModel: (id: string) => void;
   updateSettings: (settings: Partial<AppSettings>) => void;
   exportData: () => string;
   importData: (json: string) => boolean;
@@ -344,6 +419,75 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     [dispatch]
   );
 
+  const addBrand = useCallback(
+    (name: string) => {
+      const newBrand: BrandItem = { id: generateId(), name };
+      dispatch({ type: 'ADD_BRAND', payload: newBrand });
+      return newBrand;
+    },
+    [dispatch]
+  );
+
+  const updateBrand = useCallback(
+    (b: BrandItem) => {
+      dispatch({ type: 'UPDATE_BRAND', payload: b });
+    },
+    [dispatch]
+  );
+
+  const deleteBrand = useCallback(
+    (id: string) => {
+      dispatch({ type: 'DELETE_BRAND', payload: id });
+    },
+    [dispatch]
+  );
+
+  const addPackage = useCallback(
+    (name: string) => {
+      const newPkg: PackageItem = { id: generateId(), name };
+      dispatch({ type: 'ADD_PACKAGE', payload: newPkg });
+      return newPkg;
+    },
+    [dispatch]
+  );
+
+  const updatePackage = useCallback(
+    (p: PackageItem) => {
+      dispatch({ type: 'UPDATE_PACKAGE', payload: p });
+    },
+    [dispatch]
+  );
+
+  const deletePackage = useCallback(
+    (id: string) => {
+      dispatch({ type: 'DELETE_PACKAGE', payload: id });
+    },
+    [dispatch]
+  );
+
+  const addModel = useCallback(
+    (name: string) => {
+      const newModel: ModelItem = { id: generateId(), name };
+      dispatch({ type: 'ADD_MODEL', payload: newModel });
+      return newModel;
+    },
+    [dispatch]
+  );
+
+  const updateModel = useCallback(
+    (m: ModelItem) => {
+      dispatch({ type: 'UPDATE_MODEL', payload: m });
+    },
+    [dispatch]
+  );
+
+  const deleteModel = useCallback(
+    (id: string) => {
+      dispatch({ type: 'DELETE_MODEL', payload: id });
+    },
+    [dispatch]
+  );
+
   const updateSettings = useCallback(
     (settings: Partial<AppSettings>) => {
       dispatch({ type: 'UPDATE_SETTINGS', payload: settings });
@@ -399,6 +543,15 @@ export function AppProvider({ children }: { children: React.ReactNode }) {
     addSupplier,
     updateSupplier,
     deleteSupplier,
+    addBrand,
+    updateBrand,
+    deleteBrand,
+    addPackage,
+    updatePackage,
+    deletePackage,
+    addModel,
+    updateModel,
+    deleteModel,
     updateSettings,
     exportData,
     importData,

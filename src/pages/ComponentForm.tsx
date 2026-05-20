@@ -6,15 +6,11 @@ import { NavBar, SelectModal } from '../components';
 import type { ComponentItem } from '../types';
 import './ComponentForm.css';
 
-const PACKAGE_OPTIONS = [
-  '0805', '0603', '0402', 'SOT-23', 'SOD-123',
-  'LQFP-48', 'QFN-32', 'SOP-8', 'DIP-8', '模块', '其他',
-];
 const UNIT_OPTIONS = ['个', '片', '米', '卷', '包'];
 
 export default function ComponentForm() {
   const { id } = useParams<{ id: string }>();
-  const { state, addComponent, updateComponent, addCategory, addLocation } = useApp();
+  const { state, addComponent, updateComponent, addCategory, addLocation, addBrand, addPackage } = useApp();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
 
@@ -41,6 +37,8 @@ export default function ComponentForm() {
 
   const [categoryModalVisible, setCategoryModalVisible] = useState(false);
   const [locationModalVisible, setLocationModalVisible] = useState(false);
+  const [brandModalVisible, setBrandModalVisible] = useState(false);
+  const [packageModalVisible, setPackageModalVisible] = useState(false);
 
   const validate = (): boolean => {
     const errs: Record<string, string> = {};
@@ -119,8 +117,34 @@ export default function ComponentForm() {
     setLocationModalVisible(false);
   };
 
+  const handleBrandSelect = (brandId: string) => {
+    const found = state.brands.find((b) => b.id === brandId);
+    if (found) setBrand(found.name);
+    setBrandModalVisible(false);
+  };
+
+  const handleBrandCreate = (name: string) => {
+    const newBrand = addBrand(name);
+    setBrand(newBrand.name);
+    setBrandModalVisible(false);
+  };
+
+  const handlePackageSelect = (pkgId: string) => {
+    const found = state.packages.find((p) => p.id === pkgId);
+    if (found) setPkg(found.name);
+    setPackageModalVisible(false);
+  };
+
+  const handlePackageCreate = (name: string) => {
+    const newPkg = addPackage(name);
+    setPkg(newPkg.name);
+    setPackageModalVisible(false);
+  };
+
   const selectedCategory = state.categories.find((c) => c.id === categoryId);
   const selectedLocation = state.locations.find((l) => l.id === locationId);
+  const selectedBrand = state.brands.find((b) => b.name === brand);
+  const selectedPackage = state.packages.find((p) => p.name === pkg);
 
   return (
     <div className="component-form">
@@ -165,28 +189,51 @@ export default function ComponentForm() {
 
           <div className="form-row">
             <label className="form-label">封装</label>
-            <select
-              className="form-select"
-              value={pkg}
-              onChange={(e) => setPkg(e.target.value)}
+            <div
+              className="select-modal-trigger"
+              onClick={() => setPackageModalVisible(true)}
             >
-              <option value="">请选择封装</option>
-              {PACKAGE_OPTIONS.map((p) => (
-                <option key={p} value={p}>{p}</option>
-              ))}
-            </select>
+              <span className={selectedPackage ? '' : 'select-modal-placeholder'}>
+                {selectedPackage?.name || '请选择封装'}
+              </span>
+            </div>
           </div>
+          <SelectModal
+            visible={packageModalVisible}
+            title="选择封装"
+            options={state.packages}
+            value={selectedPackage?.id || ''}
+            placeholder="搜索封装..."
+            allowCreate
+            createLabel="新建封装"
+            onSelect={handlePackageSelect}
+            onCreate={handlePackageCreate}
+            onClose={() => setPackageModalVisible(false)}
+          />
 
           <div className="form-row">
             <label className="form-label">品牌</label>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="例如：ST / 国巨 / 村田"
-              value={brand}
-              onChange={(e) => setBrand(e.target.value)}
-            />
+            <div
+              className="select-modal-trigger"
+              onClick={() => setBrandModalVisible(true)}
+            >
+              <span className={selectedBrand ? '' : 'select-modal-placeholder'}>
+                {selectedBrand?.name || '请选择品牌'}
+              </span>
+            </div>
           </div>
+          <SelectModal
+            visible={brandModalVisible}
+            title="选择品牌"
+            options={state.brands}
+            value={selectedBrand?.id || ''}
+            placeholder="搜索品牌..."
+            allowCreate
+            createLabel="新建品牌"
+            onSelect={handleBrandSelect}
+            onCreate={handleBrandCreate}
+            onClose={() => setBrandModalVisible(false)}
+          />
 
           <div className="form-row">
             <label className="form-label form-label-required">分类</label>

@@ -14,6 +14,21 @@ export interface Supplier {
   contact?: string;
 }
 
+export interface BrandItem {
+  id: string;
+  name: string;
+}
+
+export interface PackageItem {
+  id: string;
+  name: string;
+}
+
+export interface ModelItem {
+  id: string;
+  name: string;
+}
+
 export interface ComponentItem {
   id: string;
   name: string;
@@ -66,6 +81,9 @@ export interface AppState {
   categories: Category[];
   locations: Location[];
   suppliers: Supplier[];
+  brands: BrandItem[];
+  packages: PackageItem[];
+  models: ModelItem[];
   settings: AppSettings;
 }
 
@@ -74,4 +92,18 @@ export interface DashboardStats {
   totalQuantity: number;
   totalValue: number;
   lowStockCount: number;
+}
+
+export interface ExcelColumnMap {
+  name: number;
+  model: number;
+  package: number;
+  brand: number;
+  categoryId: number;
+  quantity: number;
+  unit: number;
+  unitPrice: number;
+  locationId: number;
+  description: number;
+  safeStock: number;
 }

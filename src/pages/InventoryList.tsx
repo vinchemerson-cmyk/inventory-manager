@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, MapPin, ChevronRight } from 'lucide-react';
+import { Plus, MapPin, ChevronRight, Upload } from 'lucide-react';
 import { useApp } from '../store/AppContext';
 import { getCategoryName, getLocationName } from '../utils/helpers';
 import { NavBar, SearchBar, EmptyState } from '../components';
@@ -53,13 +53,24 @@ export default function InventoryList() {
       <NavBar
         title="我的库存"
         rightAction={
-          <button
-            className="nav-add-btn"
-            onClick={() => navigate('/inventory/new')}
-          >
-            <Plus size={18} />
-            <span>新增</span>
-          </button>
+          <div style={{ display: 'flex', gap: 8 }}>
+            <button
+              className="nav-add-btn"
+              style={{ background: '#f0f9ff', color: '#2563eb' }}
+              onClick={() => navigate('/import')}
+              title="Excel 导入"
+            >
+              <Upload size={16} />
+              <span>导入</span>
+            </button>
+            <button
+              className="nav-add-btn"
+              onClick={() => navigate('/inventory/new')}
+            >
+              <Plus size={18} />
+              <span>新增</span>
+            </button>
+          </div>
         }
       />
 

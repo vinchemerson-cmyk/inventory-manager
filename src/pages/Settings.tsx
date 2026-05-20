@@ -6,7 +6,7 @@ import {
   Pencil, Trash2, Plus, Check, X,
   Download, Upload, AlertTriangle, Info
 } from 'lucide-react';
-import type { Category, Location, Supplier } from '../types';
+import type { Category, Location, Supplier, BrandItem, PackageItem, ModelItem } from '../types';
 import './Settings.css';
 
 interface EditingItem {
@@ -22,10 +22,13 @@ export default function Settings() {
     addCategory, updateCategory, deleteCategory,
     addLocation, updateLocation, deleteLocation,
     addSupplier, updateSupplier, deleteSupplier,
+    addBrand, updateBrand, deleteBrand,
+    addPackage, updatePackage, deletePackage,
+    addModel, updateModel, deleteModel,
     updateSettings,
     exportData, importData, resetData
   } = useApp();
-  const { categories, locations, suppliers, settings, components, transactions } = state;
+  const { categories, locations, suppliers, brands, packages, models, settings, components, transactions } = state;
 
   const [editingCategory, setEditingCategory] = useState<EditingItem>({ id: null, name: '' });
   const [newCategoryName, setNewCategoryName] = useState('');
@@ -38,6 +41,18 @@ export default function Settings() {
   const [editingSupplier, setEditingSupplier] = useState<EditingItem>({ id: null, name: '' });
   const [newSupplierName, setNewSupplierName] = useState('');
   const [showNewSupplier, setShowNewSupplier] = useState(false);
+
+  const [editingBrand, setEditingBrand] = useState<EditingItem>({ id: null, name: '' });
+  const [newBrandName, setNewBrandName] = useState('');
+  const [showNewBrand, setShowNewBrand] = useState(false);
+
+  const [editingPackage, setEditingPackage] = useState<EditingItem>({ id: null, name: '' });
+  const [newPackageName, setNewPackageName] = useState('');
+  const [showNewPackage, setShowNewPackage] = useState(false);
+
+  const [editingModel, setEditingModel] = useState<EditingItem>({ id: null, name: '' });
+  const [newModelName, setNewModelName] = useState('');
+  const [showNewModel, setShowNewModel] = useState(false);
 
   const [showResetConfirm, setShowResetConfirm] = useState(false);
   const [importMessage, setImportMessage] = useState<string | null>(null);
@@ -109,6 +124,75 @@ export default function Settings() {
       addSupplier(newSupplierName.trim());
       setNewSupplierName('');
       setShowNewSupplier(false);
+    }
+  };
+
+  const handleStartEditBrand = (brand: BrandItem) => {
+    setEditingBrand({ id: brand.id, name: brand.name });
+  };
+
+  const handleSaveBrand = () => {
+    if (editingBrand.name.trim() && editingBrand.id) {
+      updateBrand({ id: editingBrand.id, name: editingBrand.name.trim() });
+    }
+    setEditingBrand({ id: null, name: '' });
+  };
+
+  const handleCancelEditBrand = () => {
+    setEditingBrand({ id: null, name: '' });
+  };
+
+  const handleAddBrand = () => {
+    if (newBrandName.trim()) {
+      addBrand(newBrandName.trim());
+      setNewBrandName('');
+      setShowNewBrand(false);
+    }
+  };
+
+  const handleStartEditPackage = (pkg: PackageItem) => {
+    setEditingPackage({ id: pkg.id, name: pkg.name });
+  };
+
+  const handleSavePackage = () => {
+    if (editingPackage.name.trim() && editingPackage.id) {
+      updatePackage({ id: editingPackage.id, name: editingPackage.name.trim() });
+    }
+    setEditingPackage({ id: null, name: '' });
+  };
+
+  const handleCancelEditPackage = () => {
+    setEditingPackage({ id: null, name: '' });
+  };
+
+  const handleAddPackage = () => {
+    if (newPackageName.trim()) {
+      addPackage(newPackageName.trim());
+      setNewPackageName('');
+      setShowNewPackage(false);
+    }
+  };
+
+  const handleStartEditModel = (model: ModelItem) => {
+    setEditingModel({ id: model.id, name: model.name });
+  };
+
+  const handleSaveModel = () => {
+    if (editingModel.name.trim() && editingModel.id) {
+      updateModel({ id: editingModel.id, name: editingModel.name.trim() });
+    }
+    setEditingModel({ id: null, name: '' });
+  };
+
+  const handleCancelEditModel = () => {
+    setEditingModel({ id: null, name: '' });
+  };
+
+  const handleAddModel = () => {
+    if (newModelName.trim()) {
+      addModel(newModelName.trim());
+      setNewModelName('');
+      setShowNewModel(false);
     }
   };
 
@@ -381,6 +465,171 @@ export default function Settings() {
             >
               <Plus size={16} />
               新增供应商
+            </button>
+          )}
+        </div>
+
+        <div className="settings-card">
+          <h3 className="settings-card__title">品牌管理</h3>
+          <div className="settings-list">
+            {brands.map((brand) => (
+              <div key={brand.id} className="settings-list__item">
+                {editingBrand.id === brand.id ? (
+                  renderEditRow(
+                    editingBrand,
+                    handleSaveBrand,
+                    handleCancelEditBrand,
+                    (name) => setEditingBrand((prev) => ({ ...prev, name }))
+                  )
+                ) : (
+                  <>
+                    <span className="settings-list__name">{brand.name}</span>
+                    <div className="settings-list__actions">
+                      <button
+                        className="settings-icon-btn"
+                        onClick={() => handleStartEditBrand(brand)}
+                        title="编辑"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        className="settings-icon-btn settings-icon-btn--danger"
+                        onClick={() => deleteBrand(brand.id)}
+                        title="删除"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+            {showNewBrand && (
+              <div className="settings-list__item">
+                {renderNewRow(newBrandName, handleAddBrand, () => {
+                  setShowNewBrand(false);
+                  setNewBrandName('');
+                }, setNewBrandName, '输入品牌名称')}
+              </div>
+            )}
+          </div>
+          {!showNewBrand && (
+            <button
+              className="settings-add-btn"
+              onClick={() => setShowNewBrand(true)}
+            >
+              <Plus size={16} />
+              新增品牌
+            </button>
+          )}
+        </div>
+
+        <div className="settings-card">
+          <h3 className="settings-card__title">封装管理</h3>
+          <div className="settings-list">
+            {packages.map((pkg) => (
+              <div key={pkg.id} className="settings-list__item">
+                {editingPackage.id === pkg.id ? (
+                  renderEditRow(
+                    editingPackage,
+                    handleSavePackage,
+                    handleCancelEditPackage,
+                    (name) => setEditingPackage((prev) => ({ ...prev, name }))
+                  )
+                ) : (
+                  <>
+                    <span className="settings-list__name">{pkg.name}</span>
+                    <div className="settings-list__actions">
+                      <button
+                        className="settings-icon-btn"
+                        onClick={() => handleStartEditPackage(pkg)}
+                        title="编辑"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        className="settings-icon-btn settings-icon-btn--danger"
+                        onClick={() => deletePackage(pkg.id)}
+                        title="删除"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+            {showNewPackage && (
+              <div className="settings-list__item">
+                {renderNewRow(newPackageName, handleAddPackage, () => {
+                  setShowNewPackage(false);
+                  setNewPackageName('');
+                }, setNewPackageName, '输入封装名称')}
+              </div>
+            )}
+          </div>
+          {!showNewPackage && (
+            <button
+              className="settings-add-btn"
+              onClick={() => setShowNewPackage(true)}
+            >
+              <Plus size={16} />
+              新增封装
+            </button>
+          )}
+        </div>
+
+        <div className="settings-card">
+          <h3 className="settings-card__title">型号管理</h3>
+          <div className="settings-list">
+            {models.map((model) => (
+              <div key={model.id} className="settings-list__item">
+                {editingModel.id === model.id ? (
+                  renderEditRow(
+                    editingModel,
+                    handleSaveModel,
+                    handleCancelEditModel,
+                    (name) => setEditingModel((prev) => ({ ...prev, name }))
+                  )
+                ) : (
+                  <>
+                    <span className="settings-list__name">{model.name}</span>
+                    <div className="settings-list__actions">
+                      <button
+                        className="settings-icon-btn"
+                        onClick={() => handleStartEditModel(model)}
+                        title="编辑"
+                      >
+                        <Pencil size={14} />
+                      </button>
+                      <button
+                        className="settings-icon-btn settings-icon-btn--danger"
+                        onClick={() => deleteModel(model.id)}
+                        title="删除"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+            ))}
+            {showNewModel && (
+              <div className="settings-list__item">
+                {renderNewRow(newModelName, handleAddModel, () => {
+                  setShowNewModel(false);
+                  setNewModelName('');
+                }, setNewModelName, '输入型号名称')}
+              </div>
+            )}
+          </div>
+          {!showNewModel && (
+            <button
+              className="settings-add-btn"
+              onClick={() => setShowNewModel(true)}
+            >
+              <Plus size={16} />
+              新增型号
             </button>
           )}
         </div>

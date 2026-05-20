@@ -10,6 +10,7 @@ import TransactionList from './pages/TransactionList';
 import Statistics from './pages/Statistics';
 import Settings from './pages/Settings';
 import Search from './pages/Search';
+import ImportExcel from './pages/ImportExcel';
 
 function App() {
   return (
@@ -27,6 +28,7 @@ function App() {
             <Route path="/statistics" element={<Statistics />} />
             <Route path="/settings" element={<Settings />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/import" element={<ImportExcel />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>
